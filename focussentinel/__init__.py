@@ -4,6 +4,7 @@ FocusSentinel AI - Intelligent Vision & Attention Monitoring Engine
 
 __version__ = "1.0.0"
 __author__ = "Usama Baig"
+__copyright__ = "Copyright (c) 2026 Usama Baig. All rights reserved."
 __license__ = "MIT"
 
 from .config import SentinelConfig

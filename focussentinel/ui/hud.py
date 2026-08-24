@@ -55,4 +55,17 @@ class HUDVisualizer:
         elif state == FocusState.PHONE_DISTRACTION:
             cvzone.putTextRect(frame, "PUT PHONE AWAY!", (60, 160), scale=2.2, thickness=3, colorR=(0, 140, 255))
             
+        # 5. Watermark / Author Credit (Bottom-Right)
+        h, w = frame.shape[:2]
+        cv2.putText(
+            frame,
+            "FocusSentinel AI | (c) Usama Baig",
+            (w - 280, h - 15),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.45,
+            (180, 180, 180),
+            1,
+            cv2.LINE_AA
+        )
+            
         return frame

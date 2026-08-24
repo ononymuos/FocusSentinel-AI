@@ -34,6 +34,8 @@ def main():
     
     print("=" * 60)
     print("  🛡️  FocusSentinel AI - Intelligent Focus Monitor")
+    print("  Copyright (c) 2026 Usama Baig. All rights reserved.")
+    print("  https://github.com/ononymuos/FocusSentinel-AI")
     print("=" * 60)
     print(f"[*] Camera Source: #{config.camera_index}")
     print(f"[*] Audio Alarms: {'DISABLED (Muted)' if config.audio_muted else 'ENABLED'}")

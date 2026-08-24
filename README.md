@@ -6,6 +6,22 @@ FocusSentinel AI tracks user alertness, reading posture, phone distractions, and
 
 ---
 
+## Author & Attribution
+
+- **Author / Creator**: [Usama Baig](https://github.com/ononymuos)
+- **Repository**: [https://github.com/ononymuos/FocusSentinel-AI](https://github.com/ononymuos/FocusSentinel-AI)
+- **LinkedIn**: [Usama Baig](https://www.linkedin.com/in/usama-baig-53b828385)
+
+### Giving Credit
+If you use, modify, reference, or embed FocusSentinel AI in your research, commercial applications, or open-source projects, please provide attribution by including the copyright notice and linking back to the original repository:
+
+```text
+FocusSentinel AI by Usama Baig (https://github.com/ononymuos/FocusSentinel-AI)
+Copyright (c) 2026 Usama Baig. All rights reserved.
+```
+
+---
+
 ## Core capabilities
 
 - **Drowsiness and micro-sleep tracking**: Measures eye aspect ratio (EAR) to detect prolonged eye closure.
@@ -128,6 +144,10 @@ while True:
 
 ---
 
-## License
+## License & Copyright
 
-Distributed under the MIT License. See `LICENSE` for details.
+Distributed under the MIT License.
+
+Copyright (c) 2026 **Usama Baig**. All rights reserved.
+
+See [`LICENSE`](LICENSE) for full legal text and conditions. In accordance with the license, the above copyright and permission notice must be included in all copies or substantial portions of this software.
