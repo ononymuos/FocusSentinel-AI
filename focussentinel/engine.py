@@ -95,11 +95,11 @@ class FocusSentinelEngine:
                 
             ratio = self.face_analyzer.calculate_eye_ratio(face)
             
-            # Evaluate Micro-Sleep
+            # Evaluate Micro-Sleep with decay buffer against single-frame flickers
             if not is_reading and ratio < self.config.eye_ratio_threshold:
-                self._closed_frames += 1
+                self._closed_frames = min(self._closed_frames + 2, self.config.sleep_threshold_frames + 10)
             else:
-                self._closed_frames = 0
+                self._closed_frames = max(0, self._closed_frames - 1)
                 
             if self._closed_frames >= self.config.sleep_threshold_frames:
                 is_sleepy = True
