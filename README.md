@@ -21,14 +21,14 @@ Download and run the official Windows setup wizard from [GitHub Releases](https:
 
 ```powershell
 # PowerShell: Download & Run Installer
-Invoke-WebRequest -Uri "https://github.com/ononymuos/FocusSentinel-AI/releases/download/v1.0.0/FocusSentinel_Setup_v1.0.0.exe" -OutFile "FocusSentinel_Setup_v1.0.0.exe"
-Start-Process ".\FocusSentinel_Setup_v1.0.0.exe"
+Invoke-WebRequest -Uri "https://github.com/ononymuos/FocusSentinel-AI/releases/download/v1.1.0/FocusSentinel_Setup_v1.1.0.exe" -OutFile "FocusSentinel_Setup_v1.1.0.exe"
+Start-Process ".\FocusSentinel_Setup_v1.1.0.exe"
 ```
 
 ```cmd
 :: Command Prompt (CMD): Download & Run Installer
-curl -LO https://github.com/ononymuos/FocusSentinel-AI/releases/download/v1.0.0/FocusSentinel_Setup_v1.0.0.exe
-start FocusSentinel_Setup_v1.0.0.exe
+curl -LO https://github.com/ononymuos/FocusSentinel-AI/releases/download/v1.1.0/FocusSentinel_Setup_v1.1.0.exe
+start FocusSentinel_Setup_v1.1.0.exe
 ```
 
 #### Option B: Manual Source Installation

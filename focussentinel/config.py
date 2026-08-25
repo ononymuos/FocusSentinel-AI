@@ -38,13 +38,15 @@ class SentinelConfig:
     enable_absence_audio: bool = True
     
     # Vision & Pose Thresholds
-    eye_ratio_threshold: float = 11.0          # Eye Aspect Ratio cutoff percentage
+    eye_ratio_threshold: float = 18.0          # Eye Aspect Ratio cutoff percentage (normalized by local eye width: closed ~10-15%, open ~25-35%)
     reading_pitch_threshold: float = -10.0     # Pitch in degrees (< -10 = looking down into desk/notebook)
-    sleep_threshold_frames: int = 60           # ~2.0s at 30 FPS
-    face_cover_threshold_frames: int = 120      # ~4.0s at 30 FPS
+    sleep_threshold_frames: int = 45           # ~1.5s at 30 FPS
+    face_cover_threshold_frames: int = 90      # ~3.0s at 30 FPS
     
     # Object Detection Settings
-    phone_confidence_threshold: float = 0.5
+    phone_confidence_threshold: float = 0.45
+    phone_persistence_frames: int = 3          # Require N consecutive detections to avoid single-frame flickers
+    yolo_inference_interval: int = 3           # Run YOLO every Nth frame for silky smooth 30+ FPS
     target_classes: List[str] = field(default_factory=lambda: ["cell phone"])
     
     # Visual HUD Settings

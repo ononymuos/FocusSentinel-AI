@@ -170,7 +170,21 @@ class FocusSentinelApp(ctk.CTk):
             height=32,
             command=self.reset_session
         )
-        self.btn_reset.pack(fill="x")
+        self.btn_reset.pack(fill="x", pady=(0, 6))
+        
+        self.btn_restore_defaults = ctk.CTkButton(
+            action_box,
+            text="⚙️ Restore Default Settings",
+            font=ctk.CTkFont(size=12),
+            fg_color="#1c2128",
+            border_width=1,
+            border_color="#30363d",
+            hover_color="#30363d",
+            text_color="#58a6ff",
+            height=30,
+            command=self.restore_default_settings
+        )
+        self.btn_restore_defaults.pack(fill="x")
         
         # -------------------------------------------------------------------------
         # Section 1: Vision Feature Switches (Enable/Disable Detection Modules)
@@ -332,7 +346,7 @@ class FocusSentinelApp(ctk.CTk):
         slider = ctk.CTkSlider(parent, from_=from_, to=to_, number_of_steps=50, command=lambda v: command(v, lbl_val, fmt))
         slider.set(default_val)
         slider.pack(fill="x", padx=15, pady=(0, 6))
-        return slider
+        return {"slider": slider, "label": lbl_val, "fmt": fmt, "command": command}
 
     # =========================================================================
     # Audio & Sound Management Handlers
@@ -432,9 +446,23 @@ class FocusSentinelApp(ctk.CTk):
             self.stop_session()
             
     def start_session(self):
-        self.cap = cv2.VideoCapture(self.config.camera_index)
-        if not self.cap.isOpened():
-            messagebox.showerror("Camera Error", f"Could not open camera device #{self.config.camera_index}.")
+        # Try multiple backends (DirectShow, MSMF, Default) for maximum camera compatibility
+        self.cap = None
+        backends = [cv2.CAP_DSHOW, cv2.CAP_MSMF, cv2.CAP_ANY]
+        for backend in backends:
+            try:
+                cap = cv2.VideoCapture(self.config.camera_index, backend)
+                if cap.isOpened():
+                    ret, _ = cap.read()
+                    if ret:
+                        self.cap = cap
+                        break
+                    cap.release()
+            except Exception:
+                continue
+                
+        if self.cap is None or not self.cap.isOpened():
+            messagebox.showerror("Camera Error", f"Could not open camera device #{self.config.camera_index}. Please check device permissions and connections.")
             return
             
         self.is_running = True
@@ -471,6 +499,70 @@ class FocusSentinelApp(ctk.CTk):
         self.card_time.configure(text="00:00")
         self.card_distractions.configure(text="0")
         self.card_pitch.configure(text="0.0°")
+        
+    def restore_default_settings(self):
+        """Resets all toggles, thresholds, audio paths, and sliders back to factory defaults."""
+        default_cfg = SentinelConfig()
+        
+        # 1. Vision Switches
+        self.config.enable_sleep_detection = default_cfg.enable_sleep_detection
+        self.sw_sleep_det.select() if default_cfg.enable_sleep_detection else self.sw_sleep_det.deselect()
+        
+        self.config.enable_phone_detection = default_cfg.enable_phone_detection
+        self.sw_phone_det.select() if default_cfg.enable_phone_detection else self.sw_phone_det.deselect()
+        
+        self.config.enable_absence_detection = default_cfg.enable_absence_detection
+        self.sw_abs_det.select() if default_cfg.enable_absence_detection else self.sw_abs_det.deselect()
+        
+        self.config.show_hud = default_cfg.show_hud
+        self.sw_hud.select() if default_cfg.show_hud else self.sw_hud.deselect()
+        
+        # 2. Audio Settings & Toggles
+        self.config.audio_muted = default_cfg.audio_muted
+        self.sw_master_audio.select() if not default_cfg.audio_muted else self.sw_master_audio.deselect()
+        
+        self.config.audio_volume = default_cfg.audio_volume
+        self.slider_vol.set(default_cfg.audio_volume)
+        self.lbl_vol.configure(text=f"{int(default_cfg.audio_volume*100)}%")
+        self.engine.audio_manager.set_volume(default_cfg.audio_volume)
+        
+        self.config.enable_sleep_audio = default_cfg.enable_sleep_audio
+        self.sw_sleep_snd.select() if default_cfg.enable_sleep_audio else self.sw_sleep_snd.deselect()
+        
+        self.config.enable_phone_audio = default_cfg.enable_phone_audio
+        self.sw_phone_snd.select() if default_cfg.enable_phone_audio else self.sw_phone_snd.deselect()
+        
+        self.config.enable_absence_audio = default_cfg.enable_absence_audio
+        self.sw_abs_snd.select() if default_cfg.enable_absence_audio else self.sw_abs_snd.deselect()
+        
+        # Audio Paths
+        self.config.audio_sleep_path = default_cfg.audio_sleep_path
+        self.picker_sleep["label"].configure(text=f"📁 {default_cfg.audio_sleep_path.name}")
+        self.engine.audio_manager.load_sound("sleep", default_cfg.audio_sleep_path)
+        
+        self.config.audio_phone_path = default_cfg.audio_phone_path
+        self.picker_phone["label"].configure(text=f"📁 {default_cfg.audio_phone_path.name}")
+        self.engine.audio_manager.load_sound("phone", default_cfg.audio_phone_path)
+        
+        self.config.audio_face_hidden_path = default_cfg.audio_face_hidden_path
+        self.picker_abs["label"].configure(text=f"📁 {default_cfg.audio_face_hidden_path.name}")
+        self.engine.audio_manager.load_sound("face_hidden", default_cfg.audio_face_hidden_path)
+        
+        # 3. Sensitivity Sliders & Thresholds
+        self.config.phone_confidence_threshold = default_cfg.phone_confidence_threshold
+        self.slider_phone_conf["slider"].set(default_cfg.phone_confidence_threshold)
+        self.slider_phone_conf["label"].configure(text=self.slider_phone_conf["fmt"] % default_cfg.phone_confidence_threshold)
+        self.engine.object_detector.conf_threshold = default_cfg.phone_confidence_threshold
+        
+        self.config.reading_pitch_threshold = default_cfg.reading_pitch_threshold
+        self.slider_pitch_thresh["slider"].set(default_cfg.reading_pitch_threshold)
+        self.slider_pitch_thresh["label"].configure(text=self.slider_pitch_thresh["fmt"] % default_cfg.reading_pitch_threshold)
+        
+        # 4. Camera
+        self.config.camera_index = default_cfg.camera_index
+        self.opt_camera.set(str(default_cfg.camera_index))
+        
+        messagebox.showinfo("Defaults Restored", "All FocusSentinel settings have been reset to factory defaults.")
         
     def _video_loop(self):
         while self.is_running and self.cap and self.cap.isOpened():

@@ -44,6 +44,9 @@ class FocusSentinelEngine:
         # Frame counters & state tracking
         self._closed_frames = 0
         self._covered_frames = 0
+        self._phone_frames = 0
+        self._frame_count = 0
+        self._cached_phone_detections = []
         self._is_running = False
         self._last_tick_time = time.time()
         
@@ -109,12 +112,25 @@ class FocusSentinelEngine:
             if self.config.enable_absence_detection and self._covered_frames >= self.config.face_cover_threshold_frames:
                 is_face_covered = True
                 
-        # 2. Object Distraction Detection (Phone)
+        # 2. Object Distraction Detection (Phone) with throttling & temporal persistence
+        self._frame_count += 1
         if self.config.enable_phone_detection:
-            phone_detections = self.object_detector.detect(frame)
+            interval = max(1, getattr(self.config, 'yolo_inference_interval', 3))
+            if self._frame_count % interval == 0:
+                self._cached_phone_detections = self.object_detector.detect(frame)
+            phone_detections = self._cached_phone_detections
         else:
+            self._cached_phone_detections = []
             phone_detections = []
-        phone_detected = len(phone_detections) > 0
+            
+        raw_phone_detected = len(phone_detections) > 0
+        persistence = max(1, getattr(self.config, 'phone_persistence_frames', 3))
+        if raw_phone_detected:
+            self._phone_frames = min(self._phone_frames + 1, persistence + 5)
+        else:
+            self._phone_frames = max(0, self._phone_frames - 1)
+            
+        phone_detected = self._phone_frames >= persistence
         
         # 3. Determine Focus State
         previous_state = self.metrics.current_state

@@ -2,7 +2,7 @@
 ; Author: Usama Baig (https://github.com/ononymuos/FocusSentinel-AI)
 
 #define MyAppName "FocusSentinel AI"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Usama Baig"
 #define MyAppURL "https://github.com/ononymuos/FocusSentinel-AI"
 #define MyAppExeName "FocusSentinel.exe"
@@ -18,7 +18,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=C:\Users\hecke\FocusSentinel-AI\dist_installer
-OutputBaseFilename=FocusSentinel_Setup_v1.0.0
+OutputBaseFilename=FocusSentinel_Setup_v1.1.0
 SetupIconFile=C:\Users\hecke\FocusSentinel-AI\icon.ico
 Compression=lzma2/ultra64
 SolidCompression=yes

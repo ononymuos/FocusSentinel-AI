@@ -56,9 +56,9 @@ class HeadPoseEstimator:
             rmat, _ = cv2.Rodrigues(rot_vec)
             angles, _, _, _, _, _ = cv2.RQDecomp3x3(rmat)
             
-            pitch = angles[0] * 360.0
-            yaw = angles[1] * 360.0
-            roll = angles[2] * 360.0
+            pitch = float(angles[0])
+            yaw = float(angles[1])
+            roll = float(angles[2])
             return pitch, yaw, roll
         except Exception:
             return 0.0, 0.0, 0.0
