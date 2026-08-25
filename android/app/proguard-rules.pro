@@ -1,0 +1,6 @@
+-keep class com.google.mediapipe.** { *; }
+-dontwarn com.google.mediapipe.**
+-dontwarn javax.**
+-dontwarn com.google.auto.value.**
+-dontwarn autovalue.**
+-dontwarn java.awt.**

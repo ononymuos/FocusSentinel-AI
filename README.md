@@ -14,6 +14,19 @@ FocusSentinel AI tracks user alertness, reading posture, phone distractions, and
 
 Choose your operating system below for copy-paste installation commands:
 
+### 📱 Android Installation
+
+#### Direct APK Install
+Download and install the pre-compiled Android APK package:
+- **Direct Download**: [FocusSentinel-AI-v1.1.0.apk (GitHub Release)](https://github.com/ononymuos/FocusSentinel-AI/releases/download/v1.1.0/FocusSentinel-AI-v1.1.0.apk)
+
+#### Building Android App from Source
+```bash
+cd android
+./gradlew assembleDebug
+# Output APK: android/app/build/outputs/apk/debug/app-debug.apk
+```
+
 ### 🪟 Windows Installation
 
 #### Option A: One-Click Standalone Installer (Recommended — No Python Required)
