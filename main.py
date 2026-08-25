@@ -17,21 +17,39 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument("--camera", type=int, default=0, help="Camera device index")
+    parser.add_argument("--cli", action="store_true", help="Run in classic terminal/OpenCV mode instead of modern GUI")
     parser.add_argument("--mute", action="store_true", help="Mute sound alarms")
     parser.add_argument("--no-hud", action="store_true", help="Disable HUD overlay")
     parser.add_argument("--phone-conf", type=float, default=0.5, help="Phone detection confidence threshold")
     parser.add_argument("--reading-pitch", type=float, default=-10.0, help="Downwards pitch threshold in degrees for reading posture")
+    parser.add_argument("--sleep-sound", type=str, default=None, help="Custom path to micro-sleep alarm audio file (.mp3/.wav)")
+    parser.add_argument("--phone-sound", type=str, default=None, help="Custom path to phone alert audio file (.mp3/.wav)")
+    parser.add_argument("--absence-sound", type=str, default=None, help="Custom path to absence/face-hidden audio file (.mp3/.wav)")
     
     args = parser.parse_args()
     
-    config = SentinelConfig(
-        camera_index=args.camera,
-        audio_muted=args.mute,
-        show_hud=not args.no_hud,
-        phone_confidence_threshold=args.phone_conf,
-        reading_pitch_threshold=args.reading_pitch
-    )
+    config_kwargs = {
+        "camera_index": args.camera,
+        "audio_muted": args.mute,
+        "show_hud": not args.no_hud,
+        "phone_confidence_threshold": args.phone_conf,
+        "reading_pitch_threshold": args.reading_pitch,
+    }
+    if args.sleep_sound:
+        config_kwargs["audio_sleep_path"] = Path(args.sleep_sound)
+    if args.phone_sound:
+        config_kwargs["audio_phone_path"] = Path(args.phone_sound)
+    if args.absence_sound:
+        config_kwargs["audio_face_hidden_path"] = Path(args.absence_sound)
+        
+    config = SentinelConfig(**config_kwargs)
     
+    if not args.cli:
+        from focussentinel.ui.app import FocusSentinelApp
+        app = FocusSentinelApp(config)
+        app.mainloop()
+        return
+        
     print("=" * 60)
     print("  🛡️  FocusSentinel AI - Intelligent Focus Monitor")
     print("  Copyright (c) 2026 Usama Baig. All rights reserved.")

@@ -1,26 +1,14 @@
-# Python virtual environment
-.venv/
-env/
-venv/
-ENV/
-
-# Byte-compiled / optimized files
+*.pyc
 __pycache__/
-*.py[cod]
-*$py.class
-*.pyo
-
-# Distribution / packaging
-dist/
+.venv/
 build/
-*.egg-info/
-
-# OS & Local configs
-.DS_Store
-Thumbs.db
-desktop.ini
-*.lnk
-
-# Model weights & temporary caches
-runs/
-*.tmp
+dist/
+dist_installer/
+*.spec
+send_wa_done.py
+prepare_release.py
+release_assets/
+update_direct_shortcut.ps1
+update_icon.ps1
+update_silent_shortcut.ps1
+create_shortcut.ps1

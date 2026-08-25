@@ -96,21 +96,24 @@ class FocusSentinelEngine:
             ratio = self.face_analyzer.calculate_eye_ratio(face)
             
             # Evaluate Micro-Sleep with decay buffer against single-frame flickers
-            if not is_reading and ratio < self.config.eye_ratio_threshold:
+            if self.config.enable_sleep_detection and not is_reading and ratio < self.config.eye_ratio_threshold:
                 self._closed_frames = min(self._closed_frames + 2, self.config.sleep_threshold_frames + 10)
             else:
                 self._closed_frames = max(0, self._closed_frames - 1)
                 
-            if self._closed_frames >= self.config.sleep_threshold_frames:
+            if self.config.enable_sleep_detection and self._closed_frames >= self.config.sleep_threshold_frames:
                 is_sleepy = True
         else:
             self._closed_frames = 0
             self._covered_frames += 1
-            if self._covered_frames >= self.config.face_cover_threshold_frames:
+            if self.config.enable_absence_detection and self._covered_frames >= self.config.face_cover_threshold_frames:
                 is_face_covered = True
                 
         # 2. Object Distraction Detection (Phone)
-        phone_detections = self.object_detector.detect(frame)
+        if self.config.enable_phone_detection:
+            phone_detections = self.object_detector.detect(frame)
+        else:
+            phone_detections = []
         phone_detected = len(phone_detections) > 0
         
         # 3. Determine Focus State
@@ -145,11 +148,11 @@ class FocusSentinelEngine:
         
         # 4. Audio Control Trigger
         if not self.config.audio_muted:
-            if new_state == FocusState.FACE_ABSENT:
+            if new_state == FocusState.FACE_ABSENT and self.config.enable_absence_audio:
                 self.audio_manager.play_alert("face_hidden")
-            elif new_state == FocusState.MICRO_SLEEP:
+            elif new_state == FocusState.MICRO_SLEEP and self.config.enable_sleep_audio:
                 self.audio_manager.play_alert("sleep")
-            elif new_state == FocusState.PHONE_DISTRACTION:
+            elif new_state == FocusState.PHONE_DISTRACTION and self.config.enable_phone_audio:
                 self.audio_manager.play_alert("phone")
             else:
                 self.audio_manager.stop_all()

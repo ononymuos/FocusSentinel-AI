@@ -27,6 +27,16 @@ class SentinelConfig:
     audio_volume: float = 0.8
     audio_muted: bool = False
     
+    # Feature Toggles (Vision & Distraction detectors)
+    enable_sleep_detection: bool = True
+    enable_phone_detection: bool = True
+    enable_absence_detection: bool = True
+    
+    # Feature Toggles (Individual Audio Alarms)
+    enable_sleep_audio: bool = True
+    enable_phone_audio: bool = True
+    enable_absence_audio: bool = True
+    
     # Vision & Pose Thresholds
     eye_ratio_threshold: float = 11.0          # Eye Aspect Ratio cutoff percentage
     reading_pitch_threshold: float = -10.0     # Pitch in degrees (< -10 = looking down into desk/notebook)

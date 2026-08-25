@@ -1,12 +1,111 @@
 # FocusSentinel AI
 
-Computer vision focus and study session monitor built with Python, OpenCV, and YOLOv8.
+[![Release](https://img.shields.io/github/v/release/ononymuos/FocusSentinel-AI?style=for-the-badge&color=00e5ff)](https://github.com/ononymuos/FocusSentinel-AI/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-blue?style=for-the-badge)](https://github.com/ononymuos/FocusSentinel-AI)
+
+Computer vision focus and study session monitor built with Python, OpenCV, MediaPipe, and YOLOv8.
 
 FocusSentinel AI tracks user alertness, reading posture, phone distractions, and desk absence in real time. It uses 3D head pose estimation and eye aspect ratio analysis to differentiate between active studying (looking down at a notebook) and actual drowsiness, preventing false alarms.
 
 ---
 
-## Author & Attribution
+## 📥 Installation & Quick Start
+
+Choose your operating system below for copy-paste installation commands:
+
+### 🪟 Windows Installation
+
+#### Option A: One-Click Standalone Installer (Recommended — No Python Required)
+Download and run the official Windows setup wizard from [GitHub Releases](https://github.com/ononymuos/FocusSentinel-AI/releases/latest):
+
+```powershell
+# PowerShell: Download & Run Installer
+Invoke-WebRequest -Uri "https://github.com/ononymuos/FocusSentinel-AI/releases/download/v1.0.0/FocusSentinel_Setup_v1.0.0.exe" -OutFile "FocusSentinel_Setup_v1.0.0.exe"
+Start-Process ".\FocusSentinel_Setup_v1.0.0.exe"
+```
+
+```cmd
+:: Command Prompt (CMD): Download & Run Installer
+curl -LO https://github.com/ononymuos/FocusSentinel-AI/releases/download/v1.0.0/FocusSentinel_Setup_v1.0.0.exe
+start FocusSentinel_Setup_v1.0.0.exe
+```
+
+#### Option B: Manual Source Installation
+
+```powershell
+# PowerShell
+git clone https://github.com/ononymuos/FocusSentinel-AI.git
+cd FocusSentinel-AI
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt customtkinter
+python main.py
+```
+
+```cmd
+:: Command Prompt (CMD)
+git clone https://github.com/ononymuos/FocusSentinel-AI.git
+cd FocusSentinel-AI
+python -m venv .venv
+call .venv\Scripts\activate.bat
+pip install -r requirements.txt customtkinter
+python main.py
+```
+
+---
+
+### 🐧 Linux Installation (Ubuntu, Debian, Arch, Fedora)
+
+Run the one-line terminal installer to install FocusSentinel AI, configure a dedicated virtual environment, create the `focussentinel` CLI binary, and register the application in your Desktop App Launcher menu:
+
+```bash
+# One-click automated setup
+curl -sSL https://raw.githubusercontent.com/ononymuos/FocusSentinel-AI/main/install_linux.sh | bash
+```
+
+*Or clone and run manually:*
+```bash
+git clone https://github.com/ononymuos/FocusSentinel-AI.git
+cd FocusSentinel-AI
+chmod +x install_linux.sh
+./install_linux.sh
+```
+
+To start: launch **FocusSentinel AI** from your application menu or run `~/.local/bin/focussentinel`.
+
+---
+
+### 🍎 macOS Installation (Apple Silicon M1/M2/M3/M4 & Intel)
+
+```bash
+# One-click automated setup
+curl -sSL https://raw.githubusercontent.com/ononymuos/FocusSentinel-AI/main/install_macos.sh | bash
+```
+
+*Or clone and run manually:*
+```bash
+git clone https://github.com/ononymuos/FocusSentinel-AI.git
+cd FocusSentinel-AI
+chmod +x install_macos.sh
+./install_macos.sh
+```
+
+To start: launch **FocusSentinel AI** from `~/Applications` or run `~/.local/bin/focussentinel`.
+
+---
+
+## 🎛️ Modern Desktop Control Center GUI
+
+FocusSentinel AI includes an in-app GUI control center built with CustomTkinter:
+
+- **Vision Detection Toggles**: Individual On/Off switches for Micro-Sleep Detection, YOLOv8 Phone Distraction, Absence Tracking, and Real-time HUD.
+- **Custom Audio Selector**: Directly browse and load custom `.mp3`, `.wav`, or `.ogg` sound files for Sleep, Phone, and Absence alarms with live **▶ Test** audio preview buttons.
+- **Audio Control System**: Master mute switch, master volume slider (0%–100%), and independent audio channel toggles.
+- **Live Telemetry & Diagnostics**: Real-time Focus Score percentage, active focus duration timer, distraction event counter, and 3D head pitch angle gauge.
+- **Hardware Source Selector**: In-app camera device index selector with instant switching.
+
+---
 
 - **Author / Creator**: [Usama Baig](https://github.com/ononymuos)
 - **Repository**: [https://github.com/ononymuos/FocusSentinel-AI](https://github.com/ononymuos/FocusSentinel-AI)

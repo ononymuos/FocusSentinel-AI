@@ -19,17 +19,28 @@ class AudioManager:
     def _init_mixer(self):
         try:
             import pygame
-            pygame.mixer.init()
+            if not pygame.mixer.get_init():
+                pygame.mixer.init()
             for key, path in self.audio_paths.items():
-                if path and Path(path).exists():
-                    sound = pygame.mixer.Sound(str(path))
-                    sound.set_volume(self.volume)
-                    self.sounds[key] = sound
-                else:
-                    logger.warning(f"Audio alert '{key}' file not found at: {path}")
+                self.load_sound(key, path)
         except Exception as e:
             logger.error(f"Failed to initialize pygame mixer: {e}")
             self.enabled = False
+            
+    def load_sound(self, key: str, path):
+        """Dynamically loads or replaces a sound file for a given alert key."""
+        try:
+            import pygame
+            if path and Path(path).exists():
+                sound = pygame.mixer.Sound(str(path))
+                sound.set_volume(self.volume)
+                self.sounds[key] = sound
+                self.audio_paths[key] = Path(path)
+                logger.info(f"Loaded audio alert '{key}' from: {path}")
+            else:
+                logger.warning(f"Audio alert '{key}' file not found at: {path}")
+        except Exception as e:
+            logger.error(f"Failed to load sound '{key}' from {path}: {e}")
             
     def play_alert(self, alert_key: str):
         """Plays sound alert on loop with zero latency and instant previous cutoff."""
